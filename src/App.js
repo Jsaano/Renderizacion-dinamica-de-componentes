@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import BaseColaboradores from './components/BaseColaboradores.json';
+import { useState } from 'react';
+import FormularioColaboradores from './components/FormularioColaboradores';
 
 function App() {
-  return (
+  const [colaboradores, setColaboradores] = useState(BaseColaboradores);
+  const guardarColaborador = (colaborador) => {
+    setColaboradores([...colaboradores, colaborador]);
+  };
+
+  
+   const filter = (e) => {
+    const search = e.target.value;
+    const filtered = colaboradores.filter((colaborador) => {
+      return colaborador.nombre.toLowerCase().includes(search.toLowerCase());
+    });
+    setColaboradores(filtered);
+  };
+
+
+return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <FormularioColaboradores guardarColaborador={guardarColaborador} />
+      <input type="text" placeholder="Buscar" onChange={filter} />
+      <ul>
+        {colaboradores.map((colaborador) => (
+          <li key={colaborador.id}>
+            {colaborador.nombre} {colaborador.correo}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
+
 
 export default App;
